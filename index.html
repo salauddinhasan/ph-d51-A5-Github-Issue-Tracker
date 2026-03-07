@@ -36,6 +36,52 @@
     </style>
   </head>
   <body>
-    <h1>ph-d51-A5-Github-Issue-Tracker</h1>
+    <!-- login page -->
+    <section class="login-page py-20">
+      <!-- container -->
+      <div class="max-w-[500px] mx-auto p-5 bg-sky-50 rounded-xl">
+        <!-- login container -->
+        <div class="login-container">
+          <!-- image -->
+          <div class="p-8 border border-black space-y-3 rounded-lg">
+            <img
+              class="w-16 mx-auto"
+              src="assets/github-logo.png"
+              alt="github-logo"
+            />
+            <h1 class="text-xl font-bold text-center">GitHub Issues Tracker</h1>
+            <p class="text-sm font-medium text-center">
+              Sign in to manage your issues
+            </p>
+          </div>
+
+          <!-- input form -->
+          <form class="space-y-5 pt-5" autocomplete="off">
+            <fieldset
+              class="fieldset rounded-box w-full"
+            >
+              <!-- <legend class="fieldset-legend">Login</legend> -->
+
+              <label class="label">Username</label>
+              <input   type="text" class="input input-bordered w-full" placeholder="Enter Username" />
+
+              <label class="label">Password</label>
+              <input autocomplete="new-password" type="password" class="input   input-bordered w-full" placeholder="Password" />
+
+              <button class="btn btn-primary mt-4 w-full">Sign In</button>
+            </fieldset>
+
+            <!-- <button class="btn btn-primary w-full">Sing in</button> -->
+            <p class="text-center">OR</p>
+            <p class="text-center text-gray-400">Demo Credentials:</p>
+
+            <div class="bg-blue-100 text-center rounded-lg py-5">
+              <p class="font-medium">Username: admin</p>
+              <p class="font-medium">Password: admin123</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
