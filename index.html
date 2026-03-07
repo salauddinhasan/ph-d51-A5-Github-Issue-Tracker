@@ -56,22 +56,19 @@
           </div>
 
           <!-- input form -->
-          <form class="space-y-5 pt-5" autocomplete="off">
-            <fieldset
-              class="fieldset rounded-box w-full"
-            >
-              <!-- <legend class="fieldset-legend">Login</legend> -->
+          <form  id="loginForm" class="space-y-5 pt-5" autocomplete="off">
+            <fieldset class="fieldset rounded-box w-full" >
 
               <label class="label">Username</label>
-              <input   type="text" class="input input-bordered w-full" placeholder="Enter Username" />
+              <input id="username" type="text" class="input input-bordered w-full" placeholder="Enter Username" />
 
               <label class="label">Password</label>
-              <input autocomplete="new-password" type="password" class="input   input-bordered w-full" placeholder="Password" />
+              <input id="password" autocomplete="new-password" type="password" class="input   input-bordered w-full" placeholder="Password" />
 
-              <button class="btn btn-primary mt-4 w-full">Sign In</button>
+              <button id="sign-btn" class="btn btn-primary mt-4 w-full">Sign In</button>
             </fieldset>
 
-            <!-- <button class="btn btn-primary w-full">Sing in</button> -->
+            
             <p class="text-center">OR</p>
             <p class="text-center text-gray-400">Demo Credentials:</p>
 
@@ -79,9 +76,14 @@
               <p class="font-medium">Username: admin</p>
               <p class="font-medium">Password: admin123</p>
             </div>
+
+              <p id="message" class="text-center mt-2 text-red-500"></p>
+
           </form>
         </div>
       </div>
     </section>
   </body>
 </html>
+
+ <script src="login.js"></script>
