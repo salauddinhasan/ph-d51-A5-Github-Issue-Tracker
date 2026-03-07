@@ -39,11 +39,11 @@
     <!-- header section -->
     <section class="header-section">
       <!-- container -->
-      <div class="w-11/12 mx-auto p-3">
+      <div class="md:w-11/12 mx-auto p-3">
         <!-- header container -->
-        <div class="header-container flex justify-between">
+        <div class="header-container md:flex md:justify-between space-y-3 ">
           <!-- img -->
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1">
             <img class="w-8" src="assets/github-logo.png" alt="" />
             <h1 class="text-xl font-bold">GitHub Issues Tracker</h1>
           </div>
@@ -64,5 +64,21 @@
       </div>
     </section>
     <hr class="w-full" />
+
+    <!-- tab section -->
+    <section class="tab-section py-5 md:py-16">
+      <!-- container -->
+      <div class="max-w-screen-xl mx-auto shadow-md p-3 rounded-lg">
+        <!-- tab container -->
+        <div class="tab-container flex gap-2">
+          <!-- all tab -->
+          <button id="all-tab" class="btn btn-active btn-soft text-lg w-24">All</button>
+          <!-- open tab  -->
+          <button id="open-tab" class="btn btn-active btn-soft text-lg w-24">Open</button>
+          <!-- closed tab -->
+          <button id="closed-btn" class="btn btn-active btn-soft text-lg w-24">Closed</button>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
