@@ -33,7 +33,6 @@
       body {
         font-family: "Geist", sans-serif;
       }
-       
     </style>
   </head>
   <body>
@@ -42,7 +41,7 @@
       <!-- container -->
       <div class="md:w-11/12 mx-auto p-3">
         <!-- header container -->
-        <div class="header-container md:flex md:justify-between space-y-3 ">
+        <div class="header-container md:flex md:justify-between space-y-3">
           <!-- img -->
           <div class="flex items-center gap-1">
             <img class="w-8" src="assets/github-logo.png" alt="" />
@@ -51,17 +50,18 @@
 
           <!-- search input -->
           <div class="relative join w-full max-w-md">
-
-             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 "></i>
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            ></i>
 
             <input
+            id="searchInput"
               type="search"
-              
               placeholder="Search issues..."
               required
               class="input input-bordered join-item w-full pl-8 py-3"
             />
-            <button type="button" class="btn btn-primary join-item rounded-lg">
+            <button  id="newIssueBtn" type="button" class="btn btn-primary join-item rounded-lg">
               <i class="fa-solid fa-plus"></i> New Issue
             </button>
           </div>
@@ -77,15 +77,20 @@
         <!-- tab container -->
         <div class="tab-container flex gap-2">
           <!-- all tab -->
-          <button id="all-tab" class="btn w-24 bg-blue-500 text-white">All</button>
+          <button id="all-tab" class="btn w-24 bg-blue-500 text-white">
+            All
+          </button>
           <!-- open tab  -->
-          <button id="open-tab" class="btn w-24 bg-gray-100 text-black">Open</button>
+          <button id="open-tab" class="btn w-24 bg-gray-100 text-black">
+            Open
+          </button>
           <!-- closed tab -->
-          <button id="closed-tab" class="btn w-24 bg-gray-100 text-black">Closed</button>
+          <button id="closed-tab" class="btn w-24 bg-gray-100 text-black">
+            Closed
+          </button>
         </div>
       </div>
     </section>
-
 
     <!-- issue section -->
     <section class="issue-section py-5">
@@ -93,176 +98,108 @@
       <div class="max-w-screen-2xl mx-auto shadow-md p-3 rounded-lg">
         <!-- issue container -->
         <div class="issue-container flex justify-between items-center">
-
           <div class="flex gap-2 items-center">
-            <img class="w-8 h-8"  src="assets/Aperture.png" alt="issue-icon">
+            <img class="w-8 h-8" src="assets/Aperture.png" alt="issue-icon" />
             <div>
-              <h2 class="md:text-lg font-bold"> <span id="issue-count">50</span> Issues</h2>
-              <p class="text-xs md:text-base text-gray-500">Track and manage your project issues</p>
+              <h2 class="md:text-lg font-bold">
+                <span id="issue-count">50</span> Issues
+              </h2>
+              <p class="text-xs md:text-base text-gray-500">
+                Track and manage your project issues
+              </p>
             </div>
           </div>
 
           <!-- open closed -->
           <div class="flex gap-2">
-            <p class="flex items-center gap-1"><i class="fa-solid fa-circle text-[#00A96E]"></i> Open</p>
-            <p class="flex items-center gap-1"><i class="fa-solid fa-circle text-[#A855F7]"></i> Closed</p>
+            <p class="flex items-center gap-1">
+              <i class="fa-solid fa-circle text-[#00A96E]"></i> Open
+            </p>
+            <p class="flex items-center gap-1">
+              <i class="fa-solid fa-circle text-[#A855F7]"></i> Closed
+            </p>
           </div>
         </div>
       </div>
     </section>
-
 
     <!--card section  -->
     <section class="card-section">
       <!-- container -->
       <div class="max-w-screen-2xl mx-auto shadow-md p-4 rounded-lg">
 
+        <!-- loader -->
+        <div id="loader" class="flex justify-center py-3">
+          <span class="loading loading-bars loading-xl"></span>
+        </div>
+
+ 
         <!-- card-container -->
         <div id="all-issues" class="card-container grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-         
+        </div>
       </div>
     </section>
   </body>
 </html>
 
- <script>
-  
-  const cardContainer = document.getElementById('all-issues');
+<script>
+  const loader = document.getElementById("loader");
+const cardContainer = document.getElementById("all-issues");
+const searchInput = document.getElementById("searchInput");
 
-  fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
-  .then(res => res.json())
-  .then(data => {
+const allTab = document.getElementById("all-tab");
+const openTab = document.getElementById("open-tab");
+const closedTab = document.getElementById("closed-tab");
 
-    const issues = data.data;
+const issueCount = document.getElementById("issue-count");
 
-    issues.forEach(issue => {
+let issuesData = []; // store all issues
+let activeTab = "all"; // default
 
-         // Default border and bg
-         let borderColor = 'border-t-[#00A96E]'
-         let priorityBgClass = '#EEEFF2';
-         let priorityTextClass = '#EF4444';
-         let statusImg = 'assets/Open-Status.png'
-          
-
-         // Change for LOW priority 
-         if(issue.priority.toLowerCase() ==='low') {
-          borderColor = 'border-t-[#A855F7]'
-          priorityBgClass = '#EEEFF2'; 
-          priorityTextClass = '#9CA3AF';
-          statusImg = 'assets/Closed- Status .png'
-         } else if(issue.priority.toLowerCase() ==='medium') {
-          priorityBgClass = '#FFF6D1'; 
-          priorityTextClass = '#F59E0B';
-          statusImg = 'assets/Open-Status.png'
-         } else if(issue.priority.toLowerCase() === 'high') {
-          priorityBgClass = '#FEECEC'
-          priorityTextClass = '#EF4444';
-          statusImg = 'assets/Open-Status.png'
-         }
-         
-      cardContainer.innerHTML += `
-       <!-- card -->
-          <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 ${borderColor}  hover:shadow-lg transition">
-            <div class="flex justify-between items-center">
-              <img class="h-7 bg-cover" src="${statusImg}" alt="">
-              <p class="font-bold px-4 rounded-full py-1"style="color: ${priorityTextClass}; background-color: ${priorityBgClass};">
-              ${issue.priority}
-            </p>
-            </div>
-
-            <h2 class="font-bold text-gray-700">${issue.title}</h2>
-           <p class="text-xs font-medium text-gray-500">${issue.description}</p>
-          
-            <div class="flex gap-3 items-center ">
-              <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]">
-                <i class="fa-solid fa-bug"></i>
-                BUG</p>
-              <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A]  px-4 rounded-full py-1 text-[#D97706]">
-                <i class="fa-solid fa-life-ring"></i>
-                HELP WANTED</p>
-            </div>
-
-            <hr>
-
-            <div class="text-sm font-medium text-gray-500">
-              <p>#1 by john_doe</p>
-              <p>1/15/2024</p>
-            </div>
-          </div>
-        </div>
-
-      `
-    })
-  })
-
-const allTab = document.getElementById('all-tab');
-const openTab = document.getElementById('open-tab');
-const closedTab = document.getElementById('closed-tab');
-// const cardContainer = document.getElementById('all-issues');
-// 
- 
-
-let issuesData = []; // store all fetched issues
-
-// Fetch all issues on page load
-fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
-  .then(res => res.json())
-  .then(data => {
+// Fetch issues once
+async function fetchIssues() {
+  loader.style.display = "flex";
+  try {
+    const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
+    const data = await res.json();
     issuesData = data.data;
-    renderCards(issuesData); // show all by default
-  })
-  .catch(err => console.error('Fetch Error:', err));
-
-// Function to set active tab style
-function setActiveTab(tab) {
-  [allTab, openTab, closedTab].forEach(btn => {
-    btn.classList.remove('bg-blue-500', 'text-white'); // remove active
-    btn.classList.add('bg-gray-100', 'text-black');    // inactive
-  });
-  tab.classList.add('bg-blue-500', 'text-white');      // clicked tab active
-  tab.classList.remove('bg-gray-100', 'text-black');
+    renderCards(issuesData);
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    cardContainer.innerHTML = '<p class="text-red-500">Failed to load issues.</p>';
+  } finally {
+    loader.style.display = "none";
+  }
 }
-const issueCount = document.getElementById('issue-count');
 
-// Update count whenever renderCards is called
+// Render cards function
 function renderCards(filteredIssues) {
-  cardContainer.innerHTML = ''; // clear previous cards
-  issueCount.textContent = filteredIssues.length; // update count dynamically
+  cardContainer.innerHTML = "";
+  issueCount.textContent = filteredIssues.length;
 
   filteredIssues.forEach(issue => {
-    let borderColor = (issue.status.toLowerCase() === 'open') ? 'border-t-green-500' : 'border-t-purple-500';
-    let priorityBg = '#EEEFF2';
-    let priorityText = '#EF4444';
-    
-    if(issue.priority.toLowerCase() === 'low'){
-      priorityBg = '#EEEFF2';
-      priorityText = '#9CA3AF';
-    } else if(issue.priority.toLowerCase() === 'medium'){
-      priorityBg = '#FFF6D1';
-      priorityText = '#F59E0B';
-    } else if(issue.priority.toLowerCase() === 'high'){
-      priorityBg = '#FEECEC';
-      priorityText = '#EF4444';
-    }
+    let borderColor = issue.status.toLowerCase() === "open" ? "border-t-green-500" : "border-t-purple-500";
+
+    let priorityBg = "#EEEFF2";
+    let priorityText = "#EF4444";
+    if(issue.priority.toLowerCase() === "low") { priorityText = "#9CA3AF"; }
+    else if(issue.priority.toLowerCase() === "medium") { priorityBg = "#FFF6D1"; priorityText = "#F59E0B"; }
+    else if(issue.priority.toLowerCase() === "high") { priorityBg = "#FEECEC"; priorityText = "#EF4444"; }
+
+    let statusImg = issue.status.toLowerCase() === "open" ? "assets/Open-Status.png" : "assets/Closed-Status.png";
 
     cardContainer.innerHTML += `
       <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 ${borderColor} hover:shadow-lg transition">
         <div class="flex justify-between items-center">
-          <img class="h-7 bg-cover" src="assets/Open-Status.png" alt="">
-          <p class="font-bold px-4 rounded-full py-1" style="color: ${priorityText}; background-color: ${priorityBg};">
-            ${issue.priority}
-          </p>
+          <img class="h-7 bg-cover" src="${statusImg}" alt="">
+          <p class="font-bold px-4 rounded-full py-1" style="color: ${priorityText}; background-color: ${priorityBg};">${issue.priority}</p>
         </div>
         <h2 class="font-bold text-gray-700">${issue.title}</h2>
-        <p class="text-xs font-medium text-gray-500">${issue.description}</p>
+        <p class="text-xs font-medium text-gray-500">${issue.description || ""}</p>
         <div class="flex gap-3 items-center">
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]">
-            <i class="fa-solid fa-bug"></i> BUG
-          </p>
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]">
-            <i class="fa-solid fa-life-ring"></i> HELP WANTED
-          </p>
+          <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]"><i class="fa-solid fa-bug"></i> BUG</p>
+          <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]"><i class="fa-solid fa-life-ring"></i> HELP WANTED</p>
         </div>
         <hr>
         <div class="text-sm font-medium text-gray-500">
@@ -274,22 +211,35 @@ function renderCards(filteredIssues) {
   });
 }
 
+// Active tab styling
+function setActiveTab(tab) {
+  [allTab, openTab, closedTab].forEach(btn => {
+    btn.classList.remove("bg-blue-500","text-white");
+    btn.classList.add("bg-gray-100","text-black");
+  });
+  tab.classList.add("bg-blue-500","text-white");
+  tab.classList.remove("bg-gray-100","text-black");
+}
+
+// Filter issues based on search & tab
+function filterIssues() {
+  const query = searchInput.value.toLowerCase();
+  let filtered = issuesData.filter(issue => {
+    const matchesQuery = issue.title.toLowerCase().includes(query) || (issue.description && issue.description.toLowerCase().includes(query));
+    const matchesTab = (activeTab === "all") || (activeTab === "open" && issue.status.toLowerCase() === "open") || (activeTab === "closed" && issue.status.toLowerCase() === "closed");
+    return matchesQuery && matchesTab;
+  });
+  renderCards(filtered);
+}
+
 // Tab click events
-allTab.addEventListener('click', () => {
-  setActiveTab(allTab);
-  renderCards(issuesData); // show all
-});
+allTab.addEventListener("click", () => { activeTab="all"; setActiveTab(allTab); filterIssues(); });
+openTab.addEventListener("click", () => { activeTab="open"; setActiveTab(openTab); filterIssues(); });
+closedTab.addEventListener("click", () => { activeTab="closed"; setActiveTab(closedTab); filterIssues(); });
 
-openTab.addEventListener('click', () => {
-  setActiveTab(openTab);
-  const openIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'open');
-  renderCards(openIssues); // show only open
-});
+// Search input
+searchInput.addEventListener("input", filterIssues);
 
-closedTab.addEventListener('click', () => {
-  setActiveTab(closedTab);
-  const closedIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'closed');
-  renderCards(closedIssues); // show only closed
-});
-
- </script>
+// Initial fetch
+fetchIssues();
+</script>
