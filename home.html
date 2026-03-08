@@ -49,12 +49,16 @@
           </div>
 
           <!-- search input -->
-          <div class="join w-full max-w-md gap-5">
+          <div class="relative join w-full max-w-md">
+
+             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 "></i>
+
             <input
               type="search"
+              
               placeholder="Search issues..."
               required
-              class="input input-bordered join-item w-full py-3"
+              class="input input-bordered join-item w-full pl-8 py-3"
             />
             <button type="button" class="btn btn-primary join-item rounded-lg">
               <i class="fa-solid fa-plus"></i> New Issue
@@ -66,7 +70,7 @@
     <hr class="w-full" />
 
     <!-- tab section -->
-    <section class="tab-section py-5 md:py-16">
+    <section class="tab-section py-5 md:pt-12">
       <!-- container -->
       <div class="max-w-screen-xl mx-auto shadow-md p-3 rounded-lg">
         <!-- tab container -->
@@ -83,7 +87,7 @@
 
 
     <!-- issue section -->
-    <section class="issue-section">
+    <section class="issue-section py-5">
       <!-- container -->
       <div class="max-w-screen-xl mx-auto shadow-md p-3 rounded-lg">
         <!-- issue container -->
@@ -105,5 +109,46 @@
         </div>
       </div>
     </section>
+
+
+    <!--card section  -->
+    <section class="card-section">
+      <!-- container -->
+      <div class="max-w-screen-xl mx-auto shadow-md p-4 rounded-lg">
+
+        <!-- card-container -->
+        <div id="all-card" class="card-container grid md:grid-cols-4">
+
+          <!-- card -->
+          <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 border-t-[#00A96E]  hover:shadow-lg transition">
+            <div class="flex justify-between items-center">
+              <img class="h-7 bg-cover" src="assets/Open-Status.png" alt="">
+              <p class="font-bold bg-[#FEECEC] px-4 rounded-full py-1 text-[#EF4444]">HIGH</p>
+            </div>
+
+            <h2 class="font-bold text-gray-700">Fix navigation menu on mobile devices</h2>
+            <p class="text-xs font-medium text-gray-500">The navigation menu doesn't collapse properly on mobile devices...</p>
+          
+            <div class="flex justify-between items-center ">
+              <p class="text-xs font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]">
+                <i class="fa-solid fa-bug"></i>
+                BUG</p>
+              <p class="text-xs font-medium flex items-center gap-1 bg-[#FDE68A]  px-4 rounded-full py-1 text-[#D97706]">
+                <i class="fa-solid fa-life-ring"></i>
+                HELP WANTED</p>
+            </div>
+
+            <hr>
+
+            <div class="text-sm font-medium text-gray-500">
+              <p>#1 by john_doe</p>
+            <p>1/15/2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
+
+ 
