@@ -33,6 +33,7 @@
       body {
         font-family: "Geist", sans-serif;
       }
+       
     </style>
   </head>
   <body>
@@ -76,11 +77,11 @@
         <!-- tab container -->
         <div class="tab-container flex gap-2">
           <!-- all tab -->
-          <button id="all-tab" class="btn btn-active btn-soft text-lg w-24">All</button>
+          <button id="all-tab" class="btn w-24 bg-blue-500 text-white">All</button>
           <!-- open tab  -->
-          <button id="open-tab" class="btn btn-active btn-soft text-lg w-24">Open</button>
+          <button id="open-tab" class="btn w-24 bg-gray-100 text-black">Open</button>
           <!-- closed tab -->
-          <button id="closed-btn" class="btn btn-active btn-soft text-lg w-24">Closed</button>
+          <button id="closed-tab" class="btn w-24 bg-gray-100 text-black">Closed</button>
         </div>
       </div>
     </section>
@@ -195,6 +196,39 @@
     })
   })
 
-    .catch(err => console.error('Fetch Error:', err));
+     
+// Get buttons
+const allTab = document.getElementById('all-tab');
+const openTab = document.getElementById('open-tab');
+const closedTab = document.getElementById('closed-tab');
+
+// Function to set active tab
+function setActiveTab(tab) {
+  [allTab, openTab, closedTab].forEach(btn => {
+    btn.classList.remove('bg-blue-500', 'text-white'); // remove active
+    btn.classList.add('bg-gray-100', 'text-black');    // add inactive
+  });
+
+  tab.classList.add('bg-blue-500', 'text-white');      // active clicked tab
+  tab.classList.remove('bg-gray-100', 'text-black');
+}
+
+// Click events
+allTab.addEventListener('click', () => {
+  setActiveTab(allTab);
+  renderCards(issuesData); // show all issues
+});
+
+openTab.addEventListener('click', () => {
+  setActiveTab(openTab);
+  const openIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'open');
+  renderCards(openIssues);
+});
+
+closedTab.addEventListener('click', () => {
+  setActiveTab(closedTab);
+  const closedIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'closed');
+  renderCards(closedIssues);
+});
 
  </script>
