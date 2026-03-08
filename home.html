@@ -196,39 +196,100 @@
     })
   })
 
-     
-// Get buttons
 const allTab = document.getElementById('all-tab');
 const openTab = document.getElementById('open-tab');
 const closedTab = document.getElementById('closed-tab');
+// const cardContainer = document.getElementById('all-issues');
+// 
+ 
 
-// Function to set active tab
+let issuesData = []; // store all fetched issues
+
+// Fetch all issues on page load
+fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
+  .then(res => res.json())
+  .then(data => {
+    issuesData = data.data;
+    renderCards(issuesData); // show all by default
+  })
+  .catch(err => console.error('Fetch Error:', err));
+
+// Function to set active tab style
 function setActiveTab(tab) {
   [allTab, openTab, closedTab].forEach(btn => {
     btn.classList.remove('bg-blue-500', 'text-white'); // remove active
-    btn.classList.add('bg-gray-100', 'text-black');    // add inactive
+    btn.classList.add('bg-gray-100', 'text-black');    // inactive
   });
-
-  tab.classList.add('bg-blue-500', 'text-white');      // active clicked tab
+  tab.classList.add('bg-blue-500', 'text-white');      // clicked tab active
   tab.classList.remove('bg-gray-100', 'text-black');
 }
+const issueCount = document.getElementById('issue-count');
 
-// Click events
+// Update count whenever renderCards is called
+function renderCards(filteredIssues) {
+  cardContainer.innerHTML = ''; // clear previous cards
+  issueCount.textContent = filteredIssues.length; // update count dynamically
+
+  filteredIssues.forEach(issue => {
+    let borderColor = (issue.status.toLowerCase() === 'open') ? 'border-t-green-500' : 'border-t-purple-500';
+    let priorityBg = '#EEEFF2';
+    let priorityText = '#EF4444';
+    
+    if(issue.priority.toLowerCase() === 'low'){
+      priorityBg = '#EEEFF2';
+      priorityText = '#9CA3AF';
+    } else if(issue.priority.toLowerCase() === 'medium'){
+      priorityBg = '#FFF6D1';
+      priorityText = '#F59E0B';
+    } else if(issue.priority.toLowerCase() === 'high'){
+      priorityBg = '#FEECEC';
+      priorityText = '#EF4444';
+    }
+
+    cardContainer.innerHTML += `
+      <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 ${borderColor} hover:shadow-lg transition">
+        <div class="flex justify-between items-center">
+          <img class="h-7 bg-cover" src="assets/Open-Status.png" alt="">
+          <p class="font-bold px-4 rounded-full py-1" style="color: ${priorityText}; background-color: ${priorityBg};">
+            ${issue.priority}
+          </p>
+        </div>
+        <h2 class="font-bold text-gray-700">${issue.title}</h2>
+        <p class="text-xs font-medium text-gray-500">${issue.description}</p>
+        <div class="flex gap-3 items-center">
+          <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]">
+            <i class="fa-solid fa-bug"></i> BUG
+          </p>
+          <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]">
+            <i class="fa-solid fa-life-ring"></i> HELP WANTED
+          </p>
+        </div>
+        <hr>
+        <div class="text-sm font-medium text-gray-500">
+          <p>#1 by ${issue.author}</p>
+          <p>1/15/2024</p>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// Tab click events
 allTab.addEventListener('click', () => {
   setActiveTab(allTab);
-  renderCards(issuesData); // show all issues
+  renderCards(issuesData); // show all
 });
 
 openTab.addEventListener('click', () => {
   setActiveTab(openTab);
   const openIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'open');
-  renderCards(openIssues);
+  renderCards(openIssues); // show only open
 });
 
 closedTab.addEventListener('click', () => {
   setActiveTab(closedTab);
   const closedIssues = issuesData.filter(issue => issue.status.toLowerCase() === 'closed');
-  renderCards(closedIssues);
+  renderCards(closedIssues); // show only closed
 });
 
  </script>
