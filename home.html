@@ -135,111 +135,56 @@
 
  
         <!-- card-container -->
-        <div id="all-issues" class="card-container grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
+        <div id="all-issues" class="card-container grid md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-6">
         </div>
       </div>
     </section>
+
+
+   <dialog id="issue-modal" class="modal modal-bottom sm:modal-middle ">
+  <div class="modal-box space-y-4">
+    
+    <h3 id="modal-title" class="text-lg font-bold">Fix broken image uploads</h3>
+
+    <div class="flex gap-2 items-center">
+      <p id="modal-status" class="text-base font-medium flex items-center gap-1 py-1 px-3 rounded-lg bg-[#00A96E]">Opened</p>
+      <p id="modal-author" class="py-4 text-[#64748B]">• Opened by Fahim Ahmed</p>
+      <p id="modal-date" class="py-4 text-[#64748B]">• 22/02/2026</p>
+    </div>
+
+    <div class="flex gap-3 items-center">
+      <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]">
+        <i class="fa-solid fa-bug"></i> BUG
+      </p>
+      <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]">
+        <i class="fa-solid fa-life-ring"></i> HELP WANTED
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 mt-4  ">
+      <div>
+        <p class="text-[#64748B]">Assignee:</p>
+        <h2 id="modal-assignee" class="font-bold">Salauddin khan</h2>
+      </div>
+
+      <div class="flex flex-col">
+        <p class="text-[#64748B]">Priority:</p>
+        <h2 id="modal-priority" class="text-base font-medium flex items-center gap-1 bg-[#FEECEC]  px-3 text-center w-20 rounded-lg py-1 text-[#EF4444]">High</h2>
+      </div>
+    </div>
+
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-primary">Close</button>
+      </form>
+    </div>
+
+  </div>
+</dialog>
+
+
+  
   </body>
 </html>
 
-<script>
-  const loader = document.getElementById("loader");
-const cardContainer = document.getElementById("all-issues");
-const searchInput = document.getElementById("searchInput");
-
-const allTab = document.getElementById("all-tab");
-const openTab = document.getElementById("open-tab");
-const closedTab = document.getElementById("closed-tab");
-
-const issueCount = document.getElementById("issue-count");
-
-let issuesData = []; // store all issues
-let activeTab = "all"; // default
-
-// Fetch issues once
-async function fetchIssues() {
-  loader.style.display = "flex";
-  try {
-    const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
-    const data = await res.json();
-    issuesData = data.data;
-    renderCards(issuesData);
-  } catch (err) {
-    console.error("Fetch Error:", err);
-    cardContainer.innerHTML = '<p class="text-red-500">Failed to load issues.</p>';
-  } finally {
-    loader.style.display = "none";
-  }
-}
-
-// Render cards function
-function renderCards(filteredIssues) {
-  cardContainer.innerHTML = "";
-  issueCount.textContent = filteredIssues.length;
-
-  filteredIssues.forEach(issue => {
-    let borderColor = issue.status.toLowerCase() === "open" ? "border-t-green-500" : "border-t-purple-500";
-
-    let priorityBg = "#EEEFF2";
-    let priorityText = "#EF4444";
-    if(issue.priority.toLowerCase() === "low") { priorityText = "#9CA3AF"; }
-    else if(issue.priority.toLowerCase() === "medium") { priorityBg = "#FFF6D1"; priorityText = "#F59E0B"; }
-    else if(issue.priority.toLowerCase() === "high") { priorityBg = "#FEECEC"; priorityText = "#EF4444"; }
-
-    let statusImg = issue.status.toLowerCase() === "open" ? "assets/Open-Status.png" : "assets/Closed-Status.png";
-
-    cardContainer.innerHTML += `
-      <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 ${borderColor} hover:shadow-lg transition">
-        <div class="flex justify-between items-center">
-          <img class="h-7 bg-cover" src="${statusImg}" alt="">
-          <p class="font-bold px-4 rounded-full py-1" style="color: ${priorityText}; background-color: ${priorityBg};">${issue.priority}</p>
-        </div>
-        <h2 class="font-bold text-gray-700">${issue.title}</h2>
-        <p class="text-xs font-medium text-gray-500">${issue.description || ""}</p>
-        <div class="flex gap-3 items-center">
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]"><i class="fa-solid fa-bug"></i> BUG</p>
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]"><i class="fa-solid fa-life-ring"></i> HELP WANTED</p>
-        </div>
-        <hr>
-        <div class="text-sm font-medium text-gray-500">
-          <p>#1 by ${issue.author}</p>
-          <p>1/15/2024</p>
-        </div>
-      </div>
-    `;
-  });
-}
-
-// Active tab styling
-function setActiveTab(tab) {
-  [allTab, openTab, closedTab].forEach(btn => {
-    btn.classList.remove("bg-blue-500","text-white");
-    btn.classList.add("bg-gray-100","text-black");
-  });
-  tab.classList.add("bg-blue-500","text-white");
-  tab.classList.remove("bg-gray-100","text-black");
-}
-
-// Filter issues based on search & tab
-function filterIssues() {
-  const query = searchInput.value.toLowerCase();
-  let filtered = issuesData.filter(issue => {
-    const matchesQuery = issue.title.toLowerCase().includes(query) || (issue.description && issue.description.toLowerCase().includes(query));
-    const matchesTab = (activeTab === "all") || (activeTab === "open" && issue.status.toLowerCase() === "open") || (activeTab === "closed" && issue.status.toLowerCase() === "closed");
-    return matchesQuery && matchesTab;
-  });
-  renderCards(filtered);
-}
-
-// Tab click events
-allTab.addEventListener("click", () => { activeTab="all"; setActiveTab(allTab); filterIssues(); });
-openTab.addEventListener("click", () => { activeTab="open"; setActiveTab(openTab); filterIssues(); });
-closedTab.addEventListener("click", () => { activeTab="closed"; setActiveTab(closedTab); filterIssues(); });
-
-// Search input
-searchInput.addEventListener("input", filterIssues);
-
-// Initial fetch
-fetchIssues();
-</script>
+<script src="home.js"></script>
