@@ -43,6 +43,26 @@ function renderCards(filteredIssues) {
 
     let statusImg = issue.status.toLowerCase() === "open" ? "assets/Open-Status.png" : "assets/Closed-Status.png";
 
+
+const labelsHTML = issue.labels.map(label => {
+
+  let bgColor = "bg-[#FEECEC]";
+  let textColor = "text-[#EF4444]";
+  let icon = "fa-bug";
+
+  if(label.toLowerCase() === "enhancement"){
+    bgColor = "bg-green-100";
+    textColor = "text-green-600";
+    icon = "fa-wand-magic-sparkles";
+  }
+
+  return `
+    <p class="text-base font-medium flex items-center gap-1 ${bgColor} px-3 rounded-full py-1 ${textColor}">
+      <i class="fa-solid ${icon}"></i> ${label}
+    </p>
+  `;
+}).join("");
+
     // Card HTML
     cardContainer.innerHTML += `
       <div class="shadow-md p-3 rounded-lg space-y-4 border-t-4 ${borderColor} hover:shadow-lg transition cursor-pointer" data-id="${issue.id}">
@@ -52,9 +72,8 @@ function renderCards(filteredIssues) {
         </div>
         <h2 class="font-bold text-gray-700">${issue.title}</h2>
         <p class="text-xs font-medium text-gray-500">${issue.description || ""}</p>
-        <div class="flex gap-3 items-center">
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FEECEC] px-3 rounded-full py-1 text-[#EF4444]"><i class="fa-solid fa-bug"></i> BUG</p>
-          <p class="text-base font-medium flex items-center gap-1 bg-[#FDE68A] px-4 rounded-full py-1 text-[#D97706]"><i class="fa-solid fa-life-ring"></i> HELP WANTED</p>
+        <div class="flex gap-3 flex-wrap items-center"> ${labelsHTML}
+          
         </div>
         <hr>
         <div class="text-sm font-medium text-gray-500">
